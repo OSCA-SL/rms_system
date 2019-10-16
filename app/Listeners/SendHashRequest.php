@@ -38,17 +38,13 @@ class SendHashRequest implements ShouldQueue
         $song = $event->song;
         $file_path = $event->file_path;
 
-//        dd($file_path);
-
 
         $register_url = config('app.song_register_url');
-//        $register_url = "http://localhost:8080/rms/register";
 
-        $error = new Error;
+        /*$error = new Error;
         $error->message = "SYS REQ EVENT CALLED IN Hashing: REG_URL: {$register_url}, {$song->id}, FILEPATH: {$file_path}";
-        $error->save();
+        $error->save();*/
 
-//TODO: Uncomment
         DB::connection('mysql_system')
             ->table('fingerprints')
             ->where('song_id', '=', $song->id)
@@ -77,13 +73,13 @@ class SendHashRequest implements ShouldQueue
                 }
                 $song->save();
 
-                $error = new Error;
+                /*$error = new Error;
                 $error->message = "SYS REQ OK IN Hashing/REQUEST OK:  {$song->id}, RESPONSE: {$res->getBody()->getContents()}, RESPONSE_CODE: {$res->getStatusCode()}";
-                $error->save();
+                $error->save();*/
 
             },
             function (RequestException $e) use ($song) {
-                //TODO: Uncomment
+
                 $song->refresh();
                 if ($song->hash_status > 2){
                     $song->hash_status = 2;
@@ -93,17 +89,17 @@ class SendHashRequest implements ShouldQueue
                 $message = $e->getMessage();
                 $method = $e->getRequest()->getMethod();
 
-                $error = new Error;
-                $res_body = "";
-                $res_body .= $e->getResponse()->getBody()->getContents();
-                /*$h = "";
-                foreach ($e->getResponse()->getHeaders() as $headers) {
-                    foreach ($headers as $hd => $header) {
-                        $h .= "==".$h." : ".$header;
-                    }
-                }*/
-                $error->message = "SYSTEM:HTTP:ERR SONG: {$song->id}, MSG: ".$message.", METHOD: ".$method.", REASON: ".$e->getResponse()->getReasonPhrase().", BODY: ".$res_body;
-                $error->save();
+//                $error = new Error;
+//                $res_body = "";
+//                $res_body .= $e->getResponse()->getBody()->getContents();
+//                /*$h = "";
+//                foreach ($e->getResponse()->getHeaders() as $headers) {
+//                    foreach ($headers as $hd => $header) {
+//                        $h .= "==".$h." : ".$header;
+//                    }
+//                }*/
+//                $error->message = "SYSTEM:HTTP:ERR SONG: {$song->id}, MSG: ".$message.", METHOD: ".$method.", REASON: ".$e->getResponse()->getReasonPhrase().", BODY: ".$res_body;
+//                $error->save();
 
 
                 /*$error = new Error;
