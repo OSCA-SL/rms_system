@@ -69,6 +69,9 @@ class SendHashRequest implements ShouldQueue
                 }
                 else{
                     $song->hash_status = 2;
+                    $error = new Error;
+                    $error->message = "SYS REQ OK, FP COUNT = 0 or FAILED response code:  {$song->id}, RESPONSE: {$res->getBody()->getContents()}, RESPONSE_CODE: {$res->getStatusCode()}";
+                    $error->save();
                 }
                 $song->save();
 
@@ -88,17 +91,17 @@ class SendHashRequest implements ShouldQueue
                 $message = $e->getMessage();
                 $method = $e->getRequest()->getMethod();
 
-//                $error = new Error;
-//                $res_body = "";
-//                $res_body .= $e->getResponse()->getBody()->getContents();
-//                /*$h = "";
-//                foreach ($e->getResponse()->getHeaders() as $headers) {
-//                    foreach ($headers as $hd => $header) {
-//                        $h .= "==".$h." : ".$header;
-//                    }
-//                }*/
-//                $error->message = "SYSTEM:HTTP:ERR SONG: {$song->id}, MSG: ".$message.", METHOD: ".$method.", REASON: ".$e->getResponse()->getReasonPhrase().", BODY: ".$res_body;
-//                $error->save();
+                $error = new Error;
+                $res_body = "";
+                $res_body .= $e->getResponse()->getBody()->getContents();
+                /*$h = "";
+                foreach ($e->getResponse()->getHeaders() as $headers) {
+                    foreach ($headers as $hd => $header) {
+                        $h .= "==".$h." : ".$header;
+                    }
+                }*/
+                $error->message = "SYSTEM:HTTP:ERR SONG: {$song->id}, MSG: ".$message.", METHOD: ".$method.", REASON: ".$e->getResponse()->getReasonPhrase().", BODY: ".$res_body;
+                $error->save();
 
 
                 /*$error = new Error;
