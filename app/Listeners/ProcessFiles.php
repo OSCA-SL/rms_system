@@ -60,7 +60,7 @@ class ProcessFiles implements ShouldQueue
                 $channel->refresh();
             }
 
-            while ($channel->last_fetch_at != null && $now->gt(Carbon::parse($channel->last_fetch_at)) && Carbon::parse($channel->last_fetch_at)->diffInMinutes($now) > 4 ){
+            while ($channel->last_fetch_at != null && $now->gt(Carbon::parse($channel->last_fetch_at)) && Carbon::parse($channel->last_fetch_at)->diffInMinutes($now) >= 2 ){
 //            while (strtotime($channel->last_fetch_at) <= strtotime(Carbon::now()->subMinutes(2)->toDateTimeString())){
                 /*if (strtotime($channel->last_fetch_at) <= strtotime(Carbon::now()->subMinutes(2))){
                     break;
