@@ -602,6 +602,8 @@ class ProcessFiles implements ShouldQueue
                  * End Else
                  * */
 
+                $channel->refresh();
+
             }
 
             /*
