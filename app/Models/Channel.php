@@ -11,6 +11,11 @@ class Channel extends Model
 
     protected $guarded = ['id'];
 
+    public function matches()
+    {
+        return $this->hasMany('App\Models\Match', 'song_id');
+    }
+
     public function contactUser(){
         return $this->belongsTo('App\Models\User', 'contact_user');
     }
@@ -134,12 +139,9 @@ class Channel extends Model
 
         if ($minute <= 0){
             if ($hour <= 0){
-                $hour = ($hour + 23) % 24;
-                if ($day <= 0){
-                    $day = ($day + 59) % 60;
-                }
-
+                $day = ($day + 59) % 60;
             }
+            $hour = ($hour + 23) % 24;
         }
 
         $minute = ($minute + 59) % 60;
@@ -166,11 +168,10 @@ class Channel extends Model
 
         if ($minute >= 59){
             if ($hour >= 23){
-                $hour = ($hour + 1) % 24;
-                if ($day >= 59){
-                    $day = ($day + 1) % 60;
-                }
+                $day = ($day + 1) % 60;
             }
+
+            $hour = ($hour + 1) % 24;
         }
 
         $minute = ($minute + 1) % 60;
