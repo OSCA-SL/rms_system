@@ -252,17 +252,28 @@ class ProcessFiles implements ShouldQueue
             $promise = $client->postAsync($match_url, [
                 'json' => $post_data,
             ])->then(
-                function (ResponseInterface $response) use ($channels){
-                    foreach ($channels as $channel) {
+                function (ResponseInterface $response) use ($post_data){
+                    $channel_ids = array_keys($post_data['channels']);
+                    if (count($channel_ids) > 0){
+                        Channel::whereIn('id', $channel_ids)
+                            ->update(['fetch_status' => 7]);
+                    }
+
+                    /*foreach ($channels as $channel) {
                         $channel->fetch_status = $channel->setMatchRequestOk();
                         $channel->save();
-                    }
+                    }*/
                 },
-                function (RequestException $exception) use ($channels){
-                    foreach ($channels as $channel) {
+                function (RequestException $exception) use ($post_data){
+                    $channel_ids = array_keys($post_data['channels']);
+                    if (count($channel_ids) > 0){
+                        Channel::whereIn('id', $channel_ids)
+                            ->update(['fetch_status' => 6]);
+                    }
+                    /*foreach ($channels as $channel) {
                         $channel->fetch_status = $channel->setMatchRequestFailed();
                         $channel->save();
-                    }
+                    }*/
                 }
             );
 
