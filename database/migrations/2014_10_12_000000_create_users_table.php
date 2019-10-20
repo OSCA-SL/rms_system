@@ -28,6 +28,8 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->integer('role')->default(2); // 1 - technical_admin 2 - admin, 3 - artist, 4 - client
             $table->unsignedBigInteger('added_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->string('comments')->nullable();
             $table->string('image')->default('/images/user.png');
             $table->rememberToken();

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Song extends Model
 {
@@ -20,6 +21,47 @@ class Song extends Model
     protected $appends = ['song_status'];
 
     protected $guarded = ['id'];
+
+    public function fileName()
+    {
+        return pathinfo(public_path($this->file_path))['basename'];
+    }
+
+    public function fileSize()
+    {
+        return Storage::disk('public')->size("songs/{$this->fileName()}");
+    }
+
+    public function isSinger($artist_id)
+    {
+        return $this->singers->contains($artist_id);
+    }
+
+    public function isMusician($artist_id)
+    {
+        return $this->musicians->contains($artist_id);
+    }
+
+    public function isWriter($artist_id)
+    {
+        return $this->writers->contains($artist_id);
+    }
+
+    public function isProducer($artist_id)
+    {
+        return $this->producers->contains($artist_id);
+    }
+
+    public function isArtist($artist_id)
+    {
+        return $this->artists->contains($artist_id);
+    }
+
+
+    public function matches()
+    {
+        return $this->hasMany('App\Models\Match', 'song_id');
+    }
 
     public function addedUser(){
         return $this->belongsTo('App\Models\User', 'added_by');

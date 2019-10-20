@@ -20,6 +20,9 @@ class CreateChannelsTable extends Migration
             $table->decimal('frequency', 8, 4); // in MHz
             $table->unsignedBigInteger('contact_user');
             $table->unsignedBigInteger('added_by');
+
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->string('details')->nullable();
 
             /*Used for fetching from the Radio Loging device*/
